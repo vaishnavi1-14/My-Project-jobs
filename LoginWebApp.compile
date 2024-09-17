@@ -1,0 +1,33 @@
+pipeline{
+    agent{
+        label{
+            label "built-in"
+            customWorkspace "/mnt/project"
+        }
+    }
+    tools{
+        maven "apache-maven-3.9.9"
+    }
+    environment{
+        url="https://github.com/vaishnavi1-14/project.git"
+    }
+    stages{
+        stage("clone-project"){
+            steps{
+                sh 'rm -rf *'
+                sh 'git clone $url'
+            }
+        }
+        stage("build-project"){
+            steps{
+                sh 'cd project && mvn clean install '
+            }
+        }
+        stage("copy"){
+            steps{
+                sh 'rm -rf /mnt/wars/*'
+                sh 'cp -r project/target/LoginWebApp.war /mnt/wars/'
+            }
+        }
+    }
+}
