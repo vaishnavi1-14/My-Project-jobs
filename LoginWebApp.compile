@@ -1,0 +1,24 @@
+pipeline{
+    agent{
+        label{
+            label "built-in"
+            customWorkspace "/mnt/project"
+        }
+    }
+    environment{
+        devip="10.10.2.73"
+        qaip="10.10.1.76"
+    }
+    stages{
+        stage("copy-dev-war"){
+            steps{
+                sh 'scp -r /mnt/project/project/target/LoginWebApp.war vnp@${devip}:/mnt/war-files/'
+            }
+        }
+        stage("copy-qa-war"){
+            steps{
+                sh 'scp -r /mnt/project/project/target/LoginWebApp.war vnp@${qaip}:/mnt/war-files/'
+            }
+        }
+    }
+}
